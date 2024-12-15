@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS pardalis_db.personalizacion
 (
     apodo               VARCHAR(255)                       NOT NULL,
     descripcion         TEXT                               NOT NULL,
-    foto                VARCHAR(255) DEFAULT 'default.png' NOT NULL,
+    foto                VARCHAR(255) DEFAULT 'img/profiles/ocelote.svg' NOT NULL,
     fecha_actualizacion TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT personalizacion_pk PRIMARY KEY (apodo),
     CONSTRAINT personalizacion_usuarios_fk
