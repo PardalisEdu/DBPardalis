@@ -37,7 +37,6 @@ CREATE ROLE 'pardalis_monitor';   -- Monitoreo/Reportes
 GRANT ALL PRIVILEGES ON pardalis_db.* TO 'pardalis_admin';
 
 GRANT SELECT, INSERT, UPDATE ON pardalis_db.usuarios TO 'pardalis_app';
-GRANT SELECT ON pardalis_db.niveles TO 'pardalis_app';
 GRANT SELECT, INSERT, UPDATE ON pardalis_db.personalizacion TO 'pardalis_app';
 
 -- Permisos para monitoreo
