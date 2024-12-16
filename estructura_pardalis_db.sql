@@ -26,6 +26,43 @@ CREATE TABLE IF NOT EXISTS pardalis_db.personalizacion
     DEFAULT CHARSET = utf8mb4
     COLLATE = utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS pardalis_db.blogs (
+    id VARCHAR(36) PRIMARY KEY,  -- UUID
+    titulo VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    contenido TEXT NOT NULL,
+    extracto VARCHAR(500),
+    imagen_portada VARCHAR(255),
+    fecha_publicacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    estado ENUM('borrador', 'publicado') DEFAULT 'borrador',
+    categoria VARCHAR(50) NOT NULL,
+    tiempo_lectura INT,
+    autor_apodo VARCHAR(255) NOT NULL,
+    meta_descripcion VARCHAR(255),
+    meta_keywords VARCHAR(255),
+    FOREIGN KEY (autor_apodo) REFERENCES usuarios(apodo)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS pardalis_db.blog_tags (
+    id VARCHAR(36) PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS pardalis_db.blog_posts_tags (
+    blog_id VARCHAR(36),
+    tag_id VARCHAR(36),
+    PRIMARY KEY (blog_id, tag_id),
+    FOREIGN KEY (blog_id) REFERENCES blogs(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES blog_tags(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 DROP ROLE IF EXISTS 'pardalis_admin';
 DROP ROLE IF EXISTS 'pardalis_app';
 DROP ROLE IF EXISTS 'pardalis_monitor';
@@ -38,6 +75,9 @@ GRANT ALL PRIVILEGES ON pardalis_db.* TO 'pardalis_admin';
 
 GRANT SELECT, INSERT, UPDATE ON pardalis_db.usuarios TO 'pardalis_app';
 GRANT SELECT, INSERT, UPDATE ON pardalis_db.personalizacion TO 'pardalis_app';
+GRANT SELECT, INSERT, UPDATE ON pardalis_db.blogs TO 'pardalis_app';
+GRANT SELECT, INSERT, UPDATE ON pardalis_db.blog_tags TO 'pardalis_app';
+GRANT SELECT, INSERT, UPDATE ON pardalis_db.blog_posts_tags TO 'pardalis_app';
 
 -- Permisos para monitoreo
 GRANT SELECT ON pardalis_db.* TO 'pardalis_monitor';
